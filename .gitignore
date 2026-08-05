@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment & local secrets
+.env
+.env.local
+*.log
+
+# Local data persistence if any transient files
+# data/db.json
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

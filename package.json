@@ -1,0 +1,25 @@
+{
+  "name": "edugrade-360-server",
+  "version": "1.0.0",
+  "description": "EduGrade 360 - 3-Bosqichli Imtihon va Baholash Tizimi Backend Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "exam",
+    "edugrade",
+    "proctoring",
+    "express",
+    "mongodb"
+  ],
+  "author": "EduGrade Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1"
+  }
+}
