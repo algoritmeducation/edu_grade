@@ -57,14 +57,28 @@ if (MONGODB_URI) {
       endedAt: String,
       joinedStudents: Array,
       securityAlerts: Array
-    }, { timestamps: true });
+    }, { timestamps: true, strict: false });
 
     ExamModel = mongoose.model('Exam', examSchema);
+
+    mongoose.connection.on('connected', () => {
+      useMongo = true;
+      console.log('✅ Connected to MongoDB Atlas Database successfully!');
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.warn('⚠️ MongoDB connection error:', err.message);
+      useMongo = false;
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.warn('⚠️ MongoDB connection lost. Falling back to local JSON database.');
+      useMongo = false;
+    });
 
     mongoose.connect(MONGODB_URI)
       .then(() => {
         useMongo = true;
-        console.log('✅ Connected to MongoDB Database successfully!');
       })
       .catch(err => {
         console.warn('⚠️ MongoDB connection failed. Falling back to local JSON database file (data/db.json). Reason:', err.message);
