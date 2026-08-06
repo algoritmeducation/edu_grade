@@ -16,7 +16,14 @@ try {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
+let MONGODB_URI = process.env.MONGODB_URI;
+if (MONGODB_URI) {
+  MONGODB_URI = MONGODB_URI.trim().replace(/^["']|["']$/g, '');
+  if (MONGODB_URI.startsWith('MONGODB_URI=')) {
+    MONGODB_URI = MONGODB_URI.replace(/^MONGODB_URI=/, '').trim();
+  }
+  MONGODB_URI = MONGODB_URI.replace(/^["']|["']$/g, '');
+}
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
