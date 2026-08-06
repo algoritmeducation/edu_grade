@@ -158,20 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // Unauthenticated Guest: Staff Sign-In or Student View
         if (currentRole === 'student') {
-          headerNavControl.innerHTML = `
-            <button id="navStaffLoginBtn" class="btn btn-primary btn-sm" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; display: inline-flex; align-items: center; gap: 0.35rem;">
-              ${window.Icons.get('key', 14)} Xodimlar Kirishi
-            </button>
-          `;
-          const staffBtn = headerNavControl.querySelector('#navStaffLoginBtn');
-          if (staffBtn) {
-            staffBtn.addEventListener('click', () => {
-              const staff = window.store.getAuthenticatedStaff();
-              const targetRole = staff?.role === 'admin' ? 'admin' : 'faculty';
-              window.store.setCurrentRole(targetRole);
-              updateAppView();
-            });
-          }
+          headerNavControl.innerHTML = '';
         } else {
           headerNavControl.innerHTML = `
             <button id="navReturnStudentBtn" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; display: inline-flex; align-items: center; gap: 0.35rem;">
