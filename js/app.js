@@ -82,11 +82,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Sync role from URL (supports /student, /staff, #student, #staff)
+  function syncRoleFromURL() {
+    const path = window.location.pathname.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+
+    if (path.includes('/staff') || hash.includes('#staff') || path.includes('/admin') || hash.includes('#admin')) {
+      const authStaff = window.store.getAuthenticatedStaff();
+      const role = authStaff ? (authStaff.role === 'admin' ? 'admin' : 'faculty') : 'admin';
+      window.store.setCurrentRole(role);
+    } else if (path.includes('/student') || hash.includes('#student')) {
+      window.store.setCurrentRole('student');
+    }
+  }
+
+  // Initial Route Check
+  syncRoleFromURL();
+
   // Render current role view & header state
   function updateAppView() {
     const currentRole = window.store.getCurrentRole();
     const config = ROLE_CONFIGS[currentRole] || ROLE_CONFIGS.student;
     const authStaff = window.store.getAuthenticatedStaff();
+
+    // Sync browser URL bar for direct linking
+    try {
+      if (currentRole === 'student') {
+        if (!window.location.pathname.endsWith('/student') && window.location.hash !== '#student') {
+          history.replaceState(null, '', '/student');
+        }
+      } else {
+        if (!window.location.pathname.endsWith('/staff') && window.location.hash !== '#staff') {
+          history.replaceState(null, '', '/staff');
+        }
+      }
+    } catch (e) {
+      // Fallback for strict browser origins
+    }
 
     // Update Header Navigation Control Buttons
     if (headerNavControl) {
@@ -240,6 +272,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modalOverlay) {
       modalOverlay.classList.add('hidden');
     }
+  });
+
+  // Route listeners for URL back/forward & hash updates
+  window.addEventListener('popstate', () => {
+    syncRoleFromURL();
+    updateAppView();
+  });
+
+  window.addEventListener('hashchange', () => {
+    syncRoleFromURL();
+    updateAppView();
   });
 
   // Initial App Render
